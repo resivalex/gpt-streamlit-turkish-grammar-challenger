@@ -11,20 +11,31 @@ if "initialized" not in st.session_state:
     st.session_state["initialized"] = True
     st.session_state["chat_history"] = []
     st.session_state["in_progress"] = False
-
+    st.session_state["vocabulary_theme"] = "general"
 
 st.title("Turkish Grammar Challenger")
 
 user_message = st.chat_input(
     "Type your message here:",
     disabled=st.session_state["in_progress"],
-    key="user_message",
+    key="user_message_chat_input",
     on_submit=lambda: st.session_state.update({"in_progress": True}),
 )
 
 for message in st.session_state["chat_history"]:
     with st.chat_message(message["author"]):
         st.markdown(message["content"], True)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    if st.button("1"):
+        user_option = 1
+with col2:
+    if st.button("2"):
+        user_option = 2
+with col3:
+    if st.button("3"):
+        user_option = 3
 
 if user_message:
     st.session_state["chat_history"].append({"author": "user", "content": user_message})
