@@ -1,5 +1,8 @@
 import streamlit as st
 import time
+from extra_streamlit_components import CookieManager
+
+cookie_manager = CookieManager()
 
 
 def get_bot_response(query, topic):
@@ -10,6 +13,7 @@ def get_bot_response(query, topic):
 def initialize_session_state():
     if "initialized" not in st.session_state:
         st.session_state["initialized"] = True
+        st.session_state["openai_api_key"] = ""
         st.session_state["vocabulary_topic"] = ""
         st.session_state["chat_history"] = []
         st.session_state["query"] = ""
@@ -23,6 +27,19 @@ def ensure_vocabulary_topic():
             st.rerun()
         else:
             st.stop()
+
+
+def ensure_openai_api_key():
+    cookie_openai_api_key = cookie_manager.get(cookie="openai_api_key")
+    if not cookie_openai_api_key:
+        openai_api_key = st.text_input("Enter OpenAI API key:", type="password")
+        if openai_api_key:
+            cookie_manager.set("openai_api_key", openai_api_key, expires_at=None)
+            time.sleep(0.1)  # Wait for saving cookie
+            st.rerun()
+        else:
+            st.stop()
+    st.session_state["openai_api_key"] = cookie_openai_api_key
 
 
 def render_chat_input():
@@ -90,6 +107,7 @@ def process_query():
 st.title("Turkish Grammar Challenger")
 
 initialize_session_state()
+ensure_openai_api_key()
 ensure_vocabulary_topic()
 render_chat_history()
 user_message = render_chat_input()
