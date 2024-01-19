@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "gpt-streamlit-turkish-grammar-challenger"
+version = "0.1.0"
+description = "Turkish grammar challenges for Russian speakers"
+authors = ["Ivan Reshetnikov <resivalex@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.30.0"
+openai = "^1.8.0"
+
+
+[tool.poetry.dev-dependencies]
+black = "^23.12.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
