@@ -49,13 +49,13 @@ def render_options():
 
     user_option = None
     with col1:
-        if st.button("1", key="option_1"):
+        if st.button("1"):
             user_option = 1
     with col2:
-        if st.button("2", key="option_2"):
+        if st.button("2"):
             user_option = 2
     with col3:
-        if st.button("3", key="option_3"):
+        if st.button("3"):
             user_option = 3
 
     return user_option
@@ -67,6 +67,8 @@ def process_user_message(user_message):
 
     st.session_state["chat_history"].append({"author": "user", "content": user_message})
     st.session_state["query"] = user_message
+    time.sleep(0.1)  # Wait for rendering
+    st.rerun()
 
 
 def process_query():
@@ -89,10 +91,10 @@ st.title("Turkish Grammar Challenger")
 
 initialize_session_state()
 ensure_vocabulary_topic()
+render_chat_history()
 user_message = render_chat_input()
 user_option = render_options()
 if user_option:
     user_message = str(user_option)
 process_user_message(user_message)
-render_chat_history()
 process_query()
