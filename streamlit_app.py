@@ -2,12 +2,29 @@ import streamlit as st
 import time
 from extra_streamlit_components import CookieManager
 
+from gpt_streamlit_turkish_grammar_challenger import TurkishGrammarChallenger
+
 cookie_manager = CookieManager()
 
 
-def get_bot_response(query, topic):
-    time.sleep(3)
-    return f"Topic: {topic}, You said: {query}"
+INITIAL_MESSAGE = "create_first_task"
+
+
+def get_bot_response(query):
+    task = turkish_grammar_challenger.create_task()
+
+    feedback = ""
+    if query != INITIAL_MESSAGE:
+        feedback = (
+            turkish_grammar_challenger.provide_feedback(
+                st.session_state["last_task"], query
+            )
+            + "\n\n"
+        )
+
+    st.session_state["last_task"] = task
+
+    return feedback + task
 
 
 def initialize_session_state():
@@ -17,6 +34,7 @@ def initialize_session_state():
         st.session_state["vocabulary_topic"] = ""
         st.session_state["chat_history"] = []
         st.session_state["query"] = ""
+        st.session_state["last_task"] = ""
 
 
 def ensure_vocabulary_topic():
@@ -24,6 +42,8 @@ def ensure_vocabulary_topic():
         vocabulary_topic = st.text_input("Enter a vocabulary topic:")
         if vocabulary_topic:
             st.session_state["vocabulary_topic"] = vocabulary_topic
+            st.session_state["query"] = INITIAL_MESSAGE
+            time.sleep(0.1)  # Wait for rendering
             st.rerun()
         else:
             st.stop()
@@ -93,10 +113,7 @@ def process_query():
         return
 
     with st.spinner("Thinking..."):
-        bot_response = get_bot_response(
-            query=st.session_state["query"],
-            topic=st.session_state["vocabulary_topic"],
-        )
+        bot_response = get_bot_response(query=st.session_state["query"])
         st.session_state["chat_history"].append(
             {"author": "assistant", "content": bot_response}
         )
@@ -109,6 +126,10 @@ st.title("Turkish Grammar Challenger")
 initialize_session_state()
 ensure_openai_api_key()
 ensure_vocabulary_topic()
+turkish_grammar_challenger = TurkishGrammarChallenger(
+    openai_api_key=st.session_state["openai_api_key"],
+    vocabulary_topic=st.session_state["vocabulary_topic"],
+)
 render_chat_history()
 user_message = render_chat_input()
 user_option = render_options()
