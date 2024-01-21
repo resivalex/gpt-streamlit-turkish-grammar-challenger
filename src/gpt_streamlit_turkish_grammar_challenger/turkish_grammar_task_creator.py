@@ -3,7 +3,7 @@ import random
 from .open_ai_api_client import OpenAiApiClient
 
 
-class TurkishGrammarTask:
+class TurkishGrammarTaskCreator:
     RULES = [
         "Present Continuous Tense",
         "Possessive Forms",
@@ -84,7 +84,7 @@ Vocabulary topic: "{topic}"
     def _get_rule(self) -> str:
         return random.choice(self.RULES)
 
-    def create(self) -> str:
+    def create(self) -> dict:
         rule = self._get_rule()
         prompt = self.PROMPT.format(rule=rule, topic=self.vocabulary_topic)
         task_data_text = self.api_client.get_completion(prompt)
@@ -116,10 +116,4 @@ Vocabulary topic: "{topic}"
         print(agruments)
         print()
 
-        task = f"""{agruments['russian_translation']}
-        
-1. {agruments['turkish_phrase']}
-2. {agruments['first_challenging_turkish_phrase']}
-3. {agruments['second_challenging_turkish_phrase']}
-"""
-        return task
+        return agruments

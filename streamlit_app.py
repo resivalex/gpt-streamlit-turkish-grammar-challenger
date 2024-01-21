@@ -2,7 +2,10 @@ import streamlit as st
 import time
 from extra_streamlit_components import CookieManager
 
-from gpt_streamlit_turkish_grammar_challenger import TurkishGrammarChallenger
+from gpt_streamlit_turkish_grammar_challenger import (
+    TurkishGrammarChallenger,
+    TurkishGrammarTask,
+)
 
 cookie_manager = CookieManager()
 
@@ -14,17 +17,29 @@ def get_bot_response(query):
     task = turkish_grammar_challenger.create_task()
 
     feedback = ""
-    if query != INITIAL_MESSAGE:
-        feedback = (
-            turkish_grammar_challenger.provide_feedback(
-                st.session_state["last_task"], query
-            )
-            + "\n\n"
-        )
+    last_task: TurkishGrammarTask = st.session_state["last_task"]
+    if query != INITIAL_MESSAGE and last_task:
+        feedback = turkish_grammar_challenger.provide_feedback(last_task, query)
 
     st.session_state["last_task"] = task
 
-    return feedback + task
+    task = f"""{task["russian_translation"]}
+
+1. {task["turkish_phrase"]}
+2. {task["first_challenging_turkish_phrase"]}
+3. {task["second_challenging_turkish_phrase"]}
+"""
+
+    if feedback:
+        response = f"""{feedback}
+        
+---
+
+{task}"""
+    else:
+        response = task
+
+    return response
 
 
 def initialize_session_state():
@@ -34,7 +49,7 @@ def initialize_session_state():
         st.session_state["vocabulary_topic"] = ""
         st.session_state["chat_history"] = []
         st.session_state["query"] = ""
-        st.session_state["last_task"] = ""
+        st.session_state["last_task"] = None
 
 
 def ensure_vocabulary_topic():
@@ -65,7 +80,7 @@ def ensure_openai_api_key():
 def render_chat_input():
     user_message = st.chat_input(
         "Write a message...",
-        disabled=bool(st.session_state["query"]),
+        disabled=True,
         key="user_message_chat_input",
     )
 
@@ -82,20 +97,23 @@ def render_options():
     if st.session_state["query"]:
         return None
 
+    last_task: TurkishGrammarTask = st.session_state["last_task"]
+    if not last_task:
+        return None
+
     col1, col2, col3 = st.columns(3)
-
-    user_option = None
+    selected_answer = None
     with col1:
-        if st.button("1"):
-            user_option = 1
+        if st.button("1", use_container_width=True):
+            selected_answer = last_task["turkish_phrase"]
     with col2:
-        if st.button("2"):
-            user_option = 2
+        if st.button("2", use_container_width=True):
+            selected_answer = last_task["first_challenging_turkish_phrase"]
     with col3:
-        if st.button("3"):
-            user_option = 3
+        if st.button("3", use_container_width=True):
+            selected_answer = last_task["second_challenging_turkish_phrase"]
 
-    return user_option
+    return selected_answer
 
 
 def process_user_message(user_message):
@@ -121,7 +139,7 @@ def process_query():
         st.rerun()
 
 
-st.title("Turkish Grammar Challenger")
+st.title("Turkish Grammar")
 
 initialize_session_state()
 ensure_openai_api_key()
@@ -132,8 +150,8 @@ turkish_grammar_challenger = TurkishGrammarChallenger(
 )
 render_chat_history()
 user_message = render_chat_input()
-user_option = render_options()
-if user_option:
-    user_message = str(user_option)
+user_answer = render_options()
+if user_answer:
+    user_message = user_answer
 process_user_message(user_message)
 process_query()
