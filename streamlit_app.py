@@ -20,9 +20,9 @@ def create_task():
 
     task = f"""{task["russian_translation"]}
 
-1. {task["turkish_phrase"]}
-2. {task["first_challenging_turkish_phrase"]}
-3. {task["second_challenging_turkish_phrase"]}
+1. {task["turkish_options"][0]}
+2. {task["turkish_options"][1]}
+3. {task["turkish_options"][2]}
 """
 
     return task
