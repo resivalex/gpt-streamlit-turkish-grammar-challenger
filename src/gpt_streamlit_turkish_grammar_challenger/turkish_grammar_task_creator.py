@@ -1,6 +1,7 @@
 import random
 
 from .open_ai_api_client import OpenAiApiClient
+from .types import TurkishGrammarTask
 
 
 class TurkishGrammarTaskCreator:
@@ -84,12 +85,12 @@ Vocabulary topic: "{topic}"
     def _get_rule(self) -> str:
         return random.choice(self.RULES)
 
-    def create(self) -> dict:
+    def create(self) -> TurkishGrammarTask:
         rule = self._get_rule()
         prompt = self.PROMPT.format(rule=rule, topic=self.vocabulary_topic)
         task_data_text = self.api_client.get_completion(prompt)
         print(task_data_text)
-        agruments = self.api_client.call_function(
+        arguments = self.api_client.call_function(
             prompt=task_data_text,
             name="create_task",
             description="A turkish grammar task",
@@ -113,7 +114,13 @@ Vocabulary topic: "{topic}"
                 ],
             },
         )
-        print(agruments)
+        arguments["turkish_options"] = [
+            arguments["first_challenging_turkish_phrase"],
+            arguments["second_challenging_turkish_phrase"],
+            arguments["turkish_phrase"],
+        ]
+        random.shuffle(arguments["turkish_options"])
+        print(arguments)
         print()
 
-        return agruments
+        return arguments

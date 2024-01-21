@@ -103,15 +103,16 @@ def render_options():
 
     col1, col2, col3 = st.columns(3)
     selected_answer = None
+    options = last_task["turkish_options"]
     with col1:
         if st.button("1", use_container_width=True):
-            selected_answer = last_task["turkish_phrase"]
+            selected_answer = options[0]
     with col2:
         if st.button("2", use_container_width=True):
-            selected_answer = last_task["first_challenging_turkish_phrase"]
+            selected_answer = options[1]
     with col3:
         if st.button("3", use_container_width=True):
-            selected_answer = last_task["second_challenging_turkish_phrase"]
+            selected_answer = options[2]
 
     return selected_answer
 
