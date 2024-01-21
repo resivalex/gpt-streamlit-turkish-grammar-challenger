@@ -7,6 +7,9 @@ from gpt_streamlit_turkish_grammar_challenger import (
     TurkishGrammarTask,
 )
 
+st.set_page_config(page_title="Турецкая грамматика", theme={"base": "light"})
+
+
 cookie_manager = CookieManager()
 
 
