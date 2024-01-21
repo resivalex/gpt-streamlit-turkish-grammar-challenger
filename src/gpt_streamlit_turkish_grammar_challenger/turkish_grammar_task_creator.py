@@ -82,7 +82,7 @@ Vocabulary topic: "{topic}"
     PREVIOUS_SENTENCES_PROMPT_TEMPLATE = """Previously used Turkish sentences:
 {sentences}
 
-Please ensure that the new Turkish sentences are not repetitions of the previously used sentences listed above. This will help maintain the diversity and educational value of each task.
+Create a different Turkish phrase from listed above to maintain the diversity and quality of the tasks.
 
 """
 
