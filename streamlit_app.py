@@ -79,7 +79,7 @@ def ensure_openai_api_key():
 
 def render_chat_input():
     user_message = st.chat_input(
-        "Write a message...",
+        "",
         disabled=True,
         key="user_message_chat_input",
     )
@@ -140,7 +140,7 @@ def process_query():
         st.rerun()
 
 
-st.title("Turkish Grammar")
+st.title("Турецкая грамматика")
 
 initialize_session_state()
 ensure_openai_api_key()
