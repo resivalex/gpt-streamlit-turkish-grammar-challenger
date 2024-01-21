@@ -15,7 +15,7 @@ PREPARE_FEEDBACK_TRIGGER = "prepare_feedback"
 
 
 def create_task():
-    task = turkish_grammar_challenger.create_task()
+    task = st.session_state["turkish_grammar_challenger"].create_task()
     st.session_state["last_task"] = task
 
     task = f"""{task["russian_translation"]}
@@ -28,11 +28,11 @@ def create_task():
     return task
 
 
-def prepare_feedback(answer):
+def prepare_feedback():
     last_task: TurkishGrammarTask = st.session_state["last_task"]
-    feedback = turkish_grammar_challenger.provide_feedback(
+    feedback = st.session_state["turkish_grammar_challenger"].provide_feedback(
         task=last_task,
-        user_answer=answer,
+        user_answer=st.session_state["last_answer"],
     )
 
     return feedback
@@ -43,6 +43,7 @@ def initialize_session_state():
         st.session_state["initialized"] = True
         st.session_state["openai_api_key"] = ""
         st.session_state["vocabulary_topic"] = ""
+        st.session_state["turkish_grammar_challenger"] = None
         st.session_state["chat_history"] = []
         st.session_state["query"] = ""
         st.session_state["last_task"] = None
@@ -103,13 +104,13 @@ def render_options():
     selected_answer = None
     options = last_task["turkish_options"]
     with col1:
-        if st.button("1", use_container_width=True):
+        if st.button("1", use_container_width=True, key="turkish_option_1"):
             selected_answer = options[0]
     with col2:
-        if st.button("2", use_container_width=True):
+        if st.button("2", use_container_width=True, key="turkish_option_2"):
             selected_answer = options[1]
     with col3:
-        if st.button("3", use_container_width=True):
+        if st.button("3", use_container_width=True, key="turkish_option_3"):
             selected_answer = options[2]
 
     return selected_answer
@@ -141,7 +142,7 @@ def process_query():
             st.rerun()
     if query == PREPARE_FEEDBACK_TRIGGER:
         with st.spinner("Проверка ответа..."):
-            bot_response = prepare_feedback(query)
+            bot_response = prepare_feedback()
             st.session_state["chat_history"].append(
                 {"author": "assistant", "content": bot_response}
             )
@@ -154,10 +155,11 @@ st.title("Турецкая грамматика")
 initialize_session_state()
 ensure_openai_api_key()
 ensure_vocabulary_topic()
-turkish_grammar_challenger = TurkishGrammarChallenger(
-    openai_api_key=st.session_state["openai_api_key"],
-    vocabulary_topic=st.session_state["vocabulary_topic"],
-)
+if not st.session_state["turkish_grammar_challenger"]:
+    st.session_state["turkish_grammar_challenger"] = TurkishGrammarChallenger(
+        openai_api_key=st.session_state["openai_api_key"],
+        vocabulary_topic=st.session_state["vocabulary_topic"],
+    )
 render_chat_history()
 render_disabled_chat_input()
 user_answer = render_options()

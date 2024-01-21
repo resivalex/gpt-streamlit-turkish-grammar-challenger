@@ -73,22 +73,46 @@ Russian translation: "Я читаю книгу"
 First challenging Turkish phrase: "Kitabı okurum"
 Second challenging Turkish phrase: "Kitap okur"
 
-Proceed with the next task:
+{pre_instruction}Proceed with the next task:
 
 Grammar rule: "{rule}"
 Vocabulary topic: "{topic}"
+"""
+
+    PREVIOUS_SENTENCES_PROMPT_TEMPLATE = """Previously used Turkish sentences:
+{sentences}
+
+Please ensure that the new Turkish sentences are not repetitions of the previously used sentences listed above. This will help maintain the diversity and educational value of each task.
+
 """
 
     def __init__(self, vocabulary_topic: str, api_client: OpenAiApiClient):
         self.vocabulary_topic = vocabulary_topic
         self.api_client = api_client
 
+        self.history = []
+
     def _get_rule(self) -> str:
         return random.choice(self.RULES)
 
+    def _build_pre_instruction(self) -> str:
+        if not self.history:
+            return ""
+
+        last_history_items = self.history[-10:]
+        sentence_list = [f"- {sentence}" for sentence in last_history_items]
+        sentences = "\n".join(sentence_list)
+
+        return self.PREVIOUS_SENTENCES_PROMPT_TEMPLATE.format(sentences=sentences)
+
     def create(self) -> TurkishGrammarTask:
         rule = self._get_rule()
-        prompt = self.PROMPT.format(rule=rule, topic=self.vocabulary_topic)
+
+        prompt = self.PROMPT.format(
+            rule=rule,
+            topic=self.vocabulary_topic,
+            pre_instruction=self._build_pre_instruction(),
+        )
         task_data_text = self.api_client.get_completion(prompt)
         print("Task data:")
         print(task_data_text)
@@ -125,5 +149,6 @@ Vocabulary topic: "{topic}"
         print("Task arguments:")
         print(json.dumps(arguments, indent=2, ensure_ascii=False))
         print()
+        self.history.append(arguments["turkish_phrase"])
 
         return arguments
