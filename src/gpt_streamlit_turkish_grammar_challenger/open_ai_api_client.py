@@ -32,7 +32,7 @@ class OpenAiApiClient:
             }
         ]
         completion = self.client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-3.5-turbo-1106",
             messages=messages,
             tools=tools,
             tool_choice={"type": "function", "function": {"name": name}},
