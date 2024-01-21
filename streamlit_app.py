@@ -54,7 +54,10 @@ def initialize_session_state():
 
 def ensure_vocabulary_topic():
     if st.session_state["vocabulary_topic"] == "":
-        vocabulary_topic = st.text_input("Enter a vocabulary topic:")
+        vocabulary_topic = st.chat_input(
+            "Введите тему составления фраз",
+            key="vocabulary_topic_chat_input",
+        )
         if vocabulary_topic:
             st.session_state["vocabulary_topic"] = vocabulary_topic
             st.session_state["query"] = INITIAL_MESSAGE
@@ -131,7 +134,7 @@ def process_query():
     if not st.session_state["query"]:
         return
 
-    with st.spinner("Thinking..."):
+    with st.spinner("Подготовка..."):
         bot_response = get_bot_response(query=st.session_state["query"])
         st.session_state["chat_history"].append(
             {"author": "assistant", "content": bot_response}
