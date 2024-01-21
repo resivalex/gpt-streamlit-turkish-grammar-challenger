@@ -8,6 +8,12 @@ from gpt_streamlit_turkish_grammar_challenger import (
 )
 
 
+st.set_page_config(
+    page_title="Турецкая грамматика",
+    page_icon="./icon.png",
+)
+
+
 cookie_manager = CookieManager()
 
 
