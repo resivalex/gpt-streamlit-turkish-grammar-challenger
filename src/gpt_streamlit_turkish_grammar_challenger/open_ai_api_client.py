@@ -13,6 +13,12 @@ class OpenAiApiClient:
         )
         return completion.choices[0].message.content
 
+    def _fix_encoded_symbols(self, text: str) -> str:
+        if "\\u" in text:
+            return text.encode("utf-8").decode("unicode-escape")
+
+        return text
+
     def call_function(
         self,
         prompt,
@@ -39,4 +45,10 @@ class OpenAiApiClient:
         )
         func_arguments = completion.choices[0].message.tool_calls[0].function.arguments
 
-        return json.loads(func_arguments)
+        result = json.loads(func_arguments)
+
+        for key, value in result.items():
+            if isinstance(value, str):
+                result[key] = self._fix_encoded_symbols(value)
+
+        return result

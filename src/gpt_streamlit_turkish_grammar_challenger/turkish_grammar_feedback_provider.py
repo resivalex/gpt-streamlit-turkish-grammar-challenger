@@ -3,22 +3,25 @@ from .types import TurkishGrammarTask
 
 
 class TurkishGrammarFeedbackProvider:
-    CHECK_PROMPT = """
-The Assistant, tailored for Russian speakers learning Turkish grammar, emphasizes interactive learning through an example-driven approach. It communicates in Russian and mirrors the provided interaction example format.
+    CHECK_PROMPT = """Task:
+1. Provide a comment on the provided grammar rule, Turkish phrase, and its Russian translation.
+2. The feedback should be concise, focused on explaining the principles of compound words in Turkish grammar, and given in Russian.
 
-Assistant Overview:
-- Focus: Comprehensive exploration of Turkish grammatical rules such as tenses, adjectives, participles, pronouns, gerunds, etc.
-- Response Style: Delivers concise, informative responses, adhering to the provided interaction example format.
+Objective:
+- To aid understanding of Turkish compound word principles for Russian speakers through practical examples.
 
-Task:
-1. Give a comment for provided grammar rule, Turkish phrase and its Russian translation.
-2. Feedback should be in Russian.
-3. Formatting:
-    - Feedback will include:
-        [Common grammar explanation]
-        [Suffix explanations]
+Input format:
 
-Example Tasks.
+Grammar rule: "{grammar_rule}"
+Turkish sentence: "{sentence}"
+Russian translation: "{russian_translation}"
+
+Output format:
+
+[Common grammar explanation]
+[Suffix explanations]
+
+Example Tasks:
 
 Example #1:
 
