@@ -10,17 +10,12 @@ from gpt_streamlit_turkish_grammar_challenger import (
 cookie_manager = CookieManager()
 
 
-INITIAL_MESSAGE = "create_first_task"
+CREATE_TASK_TRIGGER = "create_first_task"
+PREPARE_FEEDBACK_TRIGGER = "prepare_feedback"
 
 
-def get_bot_response(query):
+def create_task():
     task = turkish_grammar_challenger.create_task()
-
-    feedback = ""
-    last_task: TurkishGrammarTask = st.session_state["last_task"]
-    if query != INITIAL_MESSAGE and last_task:
-        feedback = turkish_grammar_challenger.provide_feedback(last_task, query)
-
     st.session_state["last_task"] = task
 
     task = f"""{task["russian_translation"]}
@@ -30,16 +25,17 @@ def get_bot_response(query):
 3. {task["second_challenging_turkish_phrase"]}
 """
 
-    if feedback:
-        response = f"""{feedback}
-        
----
+    return task
 
-{task}"""
-    else:
-        response = task
 
-    return response
+def prepare_feedback(answer):
+    last_task: TurkishGrammarTask = st.session_state["last_task"]
+    feedback = turkish_grammar_challenger.provide_feedback(
+        task=last_task,
+        user_answer=answer,
+    )
+
+    return feedback
 
 
 def initialize_session_state():
@@ -50,6 +46,7 @@ def initialize_session_state():
         st.session_state["chat_history"] = []
         st.session_state["query"] = ""
         st.session_state["last_task"] = None
+        st.session_state["last_answer"] = None
 
 
 def ensure_vocabulary_topic():
@@ -60,7 +57,7 @@ def ensure_vocabulary_topic():
         )
         if vocabulary_topic:
             st.session_state["vocabulary_topic"] = vocabulary_topic
-            st.session_state["query"] = INITIAL_MESSAGE
+            st.session_state["query"] = CREATE_TASK_TRIGGER
             time.sleep(0.1)  # Wait for rendering
             st.rerun()
         else:
@@ -80,14 +77,12 @@ def ensure_openai_api_key():
     st.session_state["openai_api_key"] = cookie_openai_api_key
 
 
-def render_chat_input():
-    user_message = st.chat_input(
+def render_disabled_chat_input():
+    st.chat_input(
         "",
         disabled=True,
         key="user_message_chat_input",
     )
-
-    return user_message
 
 
 def render_chat_history():
@@ -125,7 +120,8 @@ def process_user_message(user_message):
         return
 
     st.session_state["chat_history"].append({"author": "user", "content": user_message})
-    st.session_state["query"] = user_message
+    st.session_state["query"] = PREPARE_FEEDBACK_TRIGGER
+    st.session_state["last_answer"] = user_message
     time.sleep(0.1)  # Wait for rendering
     st.rerun()
 
@@ -134,13 +130,23 @@ def process_query():
     if not st.session_state["query"]:
         return
 
-    with st.spinner("Подготовка..."):
-        bot_response = get_bot_response(query=st.session_state["query"])
-        st.session_state["chat_history"].append(
-            {"author": "assistant", "content": bot_response}
-        )
-        st.session_state["query"] = ""
-        st.rerun()
+    query = st.session_state["query"]
+    if query == CREATE_TASK_TRIGGER:
+        with st.spinner("Подготовка задания..."):
+            bot_response = create_task()
+            st.session_state["chat_history"].append(
+                {"author": "assistant", "content": bot_response}
+            )
+            st.session_state["query"] = ""
+            st.rerun()
+    if query == PREPARE_FEEDBACK_TRIGGER:
+        with st.spinner("Проверка ответа..."):
+            bot_response = prepare_feedback(query)
+            st.session_state["chat_history"].append(
+                {"author": "assistant", "content": bot_response}
+            )
+            st.session_state["query"] = CREATE_TASK_TRIGGER
+            st.rerun()
 
 
 st.title("Турецкая грамматика")
@@ -153,9 +159,7 @@ turkish_grammar_challenger = TurkishGrammarChallenger(
     vocabulary_topic=st.session_state["vocabulary_topic"],
 )
 render_chat_history()
-user_message = render_chat_input()
+render_disabled_chat_input()
 user_answer = render_options()
-if user_answer:
-    user_message = user_answer
-process_user_message(user_message)
+process_user_message(user_answer)
 process_query()

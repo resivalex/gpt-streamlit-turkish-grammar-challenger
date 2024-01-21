@@ -97,5 +97,7 @@ Russian translation: "{russian_translation}"
 
 {grammar_explanation}
 """
+        print("Feedback:")
+        print(feedback)
 
         return feedback

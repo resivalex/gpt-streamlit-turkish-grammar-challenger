@@ -1,4 +1,5 @@
 import random
+import json
 
 from .open_ai_api_client import OpenAiApiClient
 from .types import TurkishGrammarTask
@@ -89,6 +90,7 @@ Vocabulary topic: "{topic}"
         rule = self._get_rule()
         prompt = self.PROMPT.format(rule=rule, topic=self.vocabulary_topic)
         task_data_text = self.api_client.get_completion(prompt)
+        print("Task data:")
         print(task_data_text)
         arguments = self.api_client.call_function(
             prompt=task_data_text,
@@ -120,7 +122,8 @@ Vocabulary topic: "{topic}"
             arguments["turkish_phrase"],
         ]
         random.shuffle(arguments["turkish_options"])
-        print(arguments)
+        print("Task arguments:")
+        print(json.dumps(arguments, indent=2, ensure_ascii=False))
         print()
 
         return arguments
