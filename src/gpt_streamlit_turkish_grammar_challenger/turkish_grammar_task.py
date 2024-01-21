@@ -26,18 +26,19 @@ class TurkishGrammarTask:
 2. Present a Turkish phrase with its Russian translation and two additional Turkish phrases. These phrases are designed to help Russian speakers understand Turkish grammar by illustrating the correct use of the selected rule and challenging them with similar phrases.
 
 Objective:
-- To facilitate the understanding of Turkish grammatical rules for Russian speakers through practical, interactive examples.
-- To emphasize learning through example-driven approach, focusing on grammar nuances and vocabulary in context.
-- To aid in distinguishing correct grammatical forms from similar but incorrect ones, enhancing grammar learning.
+1. To facilitate the understanding of Turkish grammatical rules for Russian speakers through practical, interactive examples.
+2. To emphasize learning through an example-driven approach, focusing on grammar nuances and vocabulary in context.
+3. To aid in distinguishing correct grammatical forms from similar but incorrect ones, enhancing grammar learning.
 
 Content Requirements:
 1. Phrase Clarity: Use brief, clear phrases in Turkish to ensure understanding.
 2. Grammar Emphasis: Highlight the specific Turkish grammar rule in each option, focusing on nuances like suffixes and word order.
 3. Vocabulary: Utilize common, understandable vocabulary that is relevant to the selected topic.
+4. Linguistic Accuracy: Ensure that Turkish and Russian phrases accurately represent the grammatical essence, considering the specificities of the Russian language.
 
 Translation Options:
-1. Translation Variation: Provide three Turkish translations, each reflecting the specified grammar rule but varying in grammatical forms.
-2. Structure Consistency: Maintain similar phrase structures in all translations to challenge correct identification.
+1. Translation Variation: Provide three Turkish translations, each reflecting the specified grammar rule but varying in grammatical forms rather than vocabulary.
+2. Structure Consistency: Maintain similar phrase structures in all translations to challenge correct identification, using the same set of words.
 3. Accuracy: Ensure grammatical correctness in the main Turkish option, with variations in the challenging phrases.
 
 Input format:
