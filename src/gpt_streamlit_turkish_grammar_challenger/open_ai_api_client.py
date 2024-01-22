@@ -2,6 +2,10 @@ from openai import OpenAI
 import json
 
 
+GPT_CHEAP_MODEL = "gpt-3.5-turbo-1106"
+GPT_SMART_MODEL = "gpt-4-1106-preview"
+
+
 class OpenAiApiClient:
     def __init__(self, api_key: str):
         self.client = OpenAI(api_key=api_key)
@@ -9,7 +13,7 @@ class OpenAiApiClient:
     def get_completion(self, prompt: str) -> str:
         messages = [{"role": "user", "content": prompt}]
         completion = self.client.chat.completions.create(
-            model="gpt-4-1106-preview", messages=messages
+            model=GPT_SMART_MODEL, messages=messages
         )
         return completion.choices[0].message.content
 
@@ -38,7 +42,7 @@ class OpenAiApiClient:
             }
         ]
         completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+            model=GPT_CHEAP_MODEL,
             messages=messages,
             tools=tools,
             tool_choice={"type": "function", "function": {"name": name}},
