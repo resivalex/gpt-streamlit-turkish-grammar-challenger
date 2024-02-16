@@ -2,8 +2,8 @@ from openai import OpenAI
 import json
 
 
-GPT_CHEAP_MODEL = "gpt-3.5-turbo-1106"
-GPT_SMART_MODEL = "gpt-4-1106-preview"
+GPT_CHEAP_MODEL = "gpt-3.5-turbo"
+GPT_SMART_MODEL = "gpt-4-turbo-preview"
 
 COMPLETION_MODEL = GPT_CHEAP_MODEL
 FUNCTION_MODEL = GPT_CHEAP_MODEL

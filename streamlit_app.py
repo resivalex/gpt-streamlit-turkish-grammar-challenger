@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import datetime
 from extra_streamlit_components import CookieManager
 
 from gpt_streamlit_turkish_grammar_challenger import (
@@ -77,7 +78,11 @@ def ensure_openai_api_key():
     if not cookie_openai_api_key:
         openai_api_key = st.text_input("Enter OpenAI API key:", type="password")
         if openai_api_key:
-            cookie_manager.set("openai_api_key", openai_api_key, expires_at=None)
+            cookie_manager.set(
+                "openai_api_key",
+                openai_api_key,
+                expires_at=datetime.datetime.now() + datetime.timedelta(days=365),
+            )
             time.sleep(0.1)  # Wait for saving cookie
             st.rerun()
         else:
