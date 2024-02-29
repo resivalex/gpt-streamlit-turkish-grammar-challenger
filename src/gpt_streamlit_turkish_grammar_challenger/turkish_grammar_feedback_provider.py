@@ -4,7 +4,7 @@ from .types import TurkishGrammarTask
 
 class TurkishGrammarFeedbackProvider:
     CHECK_PROMPT = """Task:
-1. Provide a comment on the provided grammar rule, Turkish phrase, and its Russian translation.
+1. Provide a comment on the provided grammar rules, Turkish phrase, and its Russian translation.
 2. The feedback should be concise, focused on explaining the principles of compound words in Turkish grammar, and given in Russian.
 
 Objective:
@@ -12,7 +12,7 @@ Objective:
 
 Input format:
 
-Grammar rule: "{grammar_rule}"
+Grammar rules: "{grammar_rules}"
 Turkish sentence: "{sentence}"
 Russian translation: "{russian_translation}"
 
@@ -27,48 +27,48 @@ Example #1:
 
 Input:
 
-Grammar rule: "Present Continuous Tense"
-Turkish sentence: "Kitap okuyorum"
+Grammar rules: "Present Continuous Tense, Accusative Case"
+Turkish sentence: "Kitabı okuyorum"
 Russian translation: "Я читаю книгу"
 
 Output:
 
-Эта форма глагола показывает Present Continuous в турецком языке.
-- "-yor" указывает на действие, происходящее сейчас.
-- "-um" формирует первое лицо единственного числа.
+Это предложение сочетает в себе Present Continuous Tense и Accusative Case в турецком языке.
+- "Kitabı" использует "-ı" для обозначения аккузативного падежа (винительный случай), указывая на прямой объект.
+- "Okuyorum" демонстрирует Present Continuous Tense с "-yor", указывающим на текущее действие, и "-um", формирующим первое лицо единственного числа.
 
 Example #2:
 
 Input:
 
-Grammar rule: "Possessive Forms"
-Turkish sentence: "Kedileri severiz"
-Russian translation: "Мы любим кошек"
+Grammar rules: "Possessive Forms, Plural Forms"
+Turkish sentence: "Kedilerimi arıyorum"
+Russian translation: "Я ищу своих кошек"
 
 Output:
 
-Здесь используется притяжательная форма во множественном числе на турецком.
-- "-leri" в "kedi" указывает на прямой объект во множественном числе в аккузативном падеже.
-- "-iz" в "severiz" означает первое лицо множественного числа в Present Simple.
+В этом предложении используются притяжательные и множественные формы.
+- "Kedilerimi" сочетает "kediler" (кошки) с суффиксами "-imi" для обозначения притяжательной формы в первом лице единственного числа и множественного числа объектов.
+- "Arıyorum" использует "-yor" для Present Continuous Tense и "-um" для первого лица единственного числа.
 
 Example #3:
 
 Input:
 
-Grammar rule: "Present Continuous Tense"
-Turkish sentence: "Arabayı görüyorum"
-Russian translation: "Я вижу машину"
+Grammar rules: "Future Tense, Reflexive Pronouns"
+Turkish sentence: "Kendimi tanıtacağım"
+Russian translation: "Я представлюсь"
 
 Output:
 
-Это предложение демонстрирует использование нескольких суффиксов в турецком.
-- "-yı" в "araba" обозначает аккузативный падеж в единственном числе.
-- "-yor" указывает на действие, происходящее сейчас.
-- "-um" формирует первое лицо единственного числа.
+Это предложение объединяет Future Tense и использование рефлексивных местоимений.
+- "Kendimi" использует рефлексивное местоимение "kendi" с добавлением "-mi", указывая на себя в первом лице.
+- "Tanıtacağım" демонстрирует Future Tense, с "-acağım" указывающим на будущее действие в первом лице единственного числа.
+
 
 Proceed with the next task:
 
-Grammar rule: "{grammar_rule}"
+Grammar rules: "{grammar_rules}"
 Turkish sentence: "{sentence}"
 Russian translation: "{russian_translation}"
 """
@@ -78,7 +78,7 @@ Russian translation: "{russian_translation}"
 
     def provide(self, task: TurkishGrammarTask, user_answer: str) -> str:
         prompt = self.CHECK_PROMPT.format(
-            grammar_rule=task["grammar_rule"],
+            grammar_rules=task["grammar_rules"],
             sentence=task["turkish_phrase"],
             russian_translation=task["russian_translation"],
         )
@@ -92,7 +92,7 @@ Russian translation: "{russian_translation}"
         feedback += "\n\n" + grammar_explanation
 
         feedback = f"""{simple_feedback}
-        
+
 {task["turkish_phrase"]}
 
 {grammar_explanation}

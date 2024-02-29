@@ -24,8 +24,8 @@ class TurkishGrammarTaskCreator:
         "Negative Form",
     ]
     PROMPT = """Task:
-1. You are provided with a vocabulary topic and a grammar rule.
-2. Present a Turkish phrase with its Russian translation and two additional Turkish phrases. These phrases are designed to help Russian speakers understand Turkish grammar by illustrating the correct use of the selected rule and challenging them with similar phrases.
+1. You are provided with a vocabulary topic and grammar rules.
+2. Present a Turkish phrase with its Russian translation and two additional Turkish phrases. These phrases are designed to help Russian speakers understand Turkish grammar by illustrating the correct use of the selected rules and challenging them with similar phrases.
 
 Objective:
 1. To facilitate the understanding of Turkish grammatical rules for Russian speakers through practical, interactive examples.
@@ -34,23 +34,23 @@ Objective:
 
 Content Requirements:
 1. Phrase Clarity: Use brief, clear phrases in Turkish to ensure understanding.
-2. Grammar Emphasis: Highlight the specific Turkish grammar rule in each option, focusing on nuances like suffixes and word order.
+2. Grammar Emphasis: Highlight the specific Turkish grammar rules in each option, focusing on nuances like suffixes and word order.
 3. Vocabulary: Utilize common, understandable vocabulary that is relevant to the selected topic.
 4. Linguistic Accuracy: Ensure that Turkish and Russian phrases accurately represent the grammatical essence, considering the specificities of the Russian language.
 
 Translation Options:
-1. Translation Variation: Provide three Turkish translations, each reflecting the specified grammar rule but varying in grammatical forms rather than vocabulary.
+1. Translation Variation: Provide three Turkish translations, each reflecting the specified grammar rules but varying in grammatical forms rather than vocabulary.
 2. Structure Consistency: Maintain similar phrase structures in all translations to challenge correct identification, using the same set of words.
 3. Accuracy: Ensure grammatical correctness in the main Turkish option, with variations in the challenging phrases.
 
 Input format:
 
-Grammar rule: "[Grammar rule]"
+Grammar rules: "[Grammar rules]"
 Vocabulary topic: "[Vocabulary topic]"
 
 Output format:
 
-Grammar rule: "[Grammar rule]"
+Grammar rules: "[Grammar rules]"
 Vocabulary topic: "[Vocabulary topic]"
 Correct Turkish phrase: "[Turkish phrase]"
 Russian translation: "[Russian phrase]"
@@ -61,28 +61,28 @@ Example Task:
 
 Input:
 
-Grammar rule: "Present Continuous Tense"
+Grammar rules: "Past Simple Tense, Possessive Forms"
 Vocabulary topic: "Досуг"
 
 Output:
 
-Grammar rule: "Present Continuous Tense"
+Grammar rules: "Past Simple Tense, Possessive Forms"
 Vocabulary topic: "Досуг"
-Correct Turkish phrase: "Kitap okuyorum"
-Russian translation: "Я читаю книгу"
-First challenging Turkish phrase: "Kitabı okurum"
-Second challenging Turkish phrase: "Kitap okur"
+Correct Turkish phrase: "Kitabımı okudum"
+Russian translation: "Я прочитал свою книгу"
+First challenging Turkish phrase: "Kitap okuyorum"
+Second challenging Turkish phrase: "Kitabı okurum"
 
 {pre_instruction}Proceed with the next task:
 
-Grammar rule: "{rule}"
+Grammar rules: "{rules}"
 Vocabulary topic: "{topic}"
 """
 
     PREVIOUS_SENTENCES_PROMPT_TEMPLATE = """Previously used Turkish sentences:
 {sentences}
 
-Create a different Turkish phrase from listed above to maintain the diversity and quality of the tasks.
+Create a Turkish phrase different from listed above to maintain the diversity and quality of the tasks.
 
 """
 
@@ -92,8 +92,8 @@ Create a different Turkish phrase from listed above to maintain the diversity an
 
         self.history = []
 
-    def _get_rule(self) -> str:
-        return random.choice(self.RULES)
+    def _get_rules(self) -> list:
+        return random.sample(self.RULES, 2)
 
     def _build_pre_instruction(self) -> str:
         if not self.history:
@@ -106,10 +106,11 @@ Create a different Turkish phrase from listed above to maintain the diversity an
         return self.PREVIOUS_SENTENCES_PROMPT_TEMPLATE.format(sentences=sentences)
 
     def create(self) -> TurkishGrammarTask:
-        rule = self._get_rule()
+        rules = self._get_rules()
+        rules_text = ", ".join(rules)
 
         prompt = self.PROMPT.format(
-            rule=rule,
+            rules=rules_text,
             topic=self.vocabulary_topic,
             pre_instruction=self._build_pre_instruction(),
         )
@@ -123,7 +124,7 @@ Create a different Turkish phrase from listed above to maintain the diversity an
             schema={
                 "type": "object",
                 "properties": {
-                    "grammar_rule": {"type": "string"},
+                    "grammar_rules": {"type": "string"},
                     "vocabulary_topic": {"type": "string"},
                     "turkish_phrase": {"type": "string"},
                     "russian_translation": {"type": "string"},
@@ -131,7 +132,7 @@ Create a different Turkish phrase from listed above to maintain the diversity an
                     "second_challenging_turkish_phrase": {"type": "string"},
                 },
                 "required": [
-                    "grammar_rule",
+                    "grammar_rules",
                     "vocabulary_topic",
                     "turkish_phrase",
                     "russian_translation",

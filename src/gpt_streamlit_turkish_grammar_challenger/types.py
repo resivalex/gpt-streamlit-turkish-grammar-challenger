@@ -2,7 +2,7 @@ from typing import TypedDict
 
 
 class TurkishGrammarTask(TypedDict):
-    grammar_rule: str
+    grammar_rules: str
     vocabulary_topic: str
     turkish_phrase: str
     russian_translation: str
