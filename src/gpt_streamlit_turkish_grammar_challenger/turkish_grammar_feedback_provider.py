@@ -4,17 +4,17 @@ from .types import TurkishGrammarTask
 
 class TurkishGrammarFeedbackProvider:
     CHECK_PROMPT = """Task:
-1. Provide a comment on the provided grammar rules, Turkish phrase, and its Russian translation.
-2. The feedback should be concise, focused on explaining the principles of compound words in Turkish grammar, and given in Russian.
+1. Comment on the provided grammar rules, Turkish phrase, and its Russian translation.
+2. The feedback should be concise, focused on elucidating the principles of compound words in Turkish grammar, and provided in Russian. Explain word by word, see examples.
 
 Objective:
-- To aid understanding of Turkish compound word principles for Russian speakers through practical examples.
+- To deepen understanding of the construction of Turkish compound words for Russian speakers, using practical examples for illustrative purposes.
 
 Input format:
 
-Grammar rules: "{grammar_rules}"
-Turkish sentence: "{sentence}"
-Russian translation: "{russian_translation}"
+Grammar rules: "[Grammar rules]"
+Turkish sentence: "[Turkish sentence]"
+Russian translation: "[Russian translation]"
 
 Output format:
 
@@ -33,10 +33,10 @@ Russian translation: "Я читаю книгу"
 
 Output:
 
-**Present Continuous Tense* и *Accusative Case**.
+**Present Continuous Tense** и **Accusative Case**.
 - "Kitabı":
     - "kitap" - книга
-    - "-ı" - аккузативный падеж, обозначает прямой объект
+    - "-ı" - аккузативный падеж, указывает на прямой объект
 - "Okuyorum":
     - "oku" - читать
     - "-yor" - настоящее продолженное время
@@ -53,7 +53,7 @@ Russian translation: "Я ищу своих кошек"
 Output:
 
 **Possessive Forms** и **Plural Forms**.
-- "kedilerimi"
+- "Kedilerimi":
     - "kedi" - кошка
     - "-ler" - множественное число
     - "-imi" - притяжательная форма в первом лице единственного числа, мои
@@ -75,7 +75,7 @@ Output:
 **Future Tense** и **Reflexive Pronouns**.
 - "Kendimi":
     - "kendi" - сам
-    - "-mi" - меня, отражает использование рефлексивного местоимения в первом лице
+    - "-mi" - меня, демонстрирует использование рефлексивного местоимения в первом лице
 - "Tanıtacağım":
     - "tanıt" - представлять
     - "-acağım" - будущее время в первом лице единственного числа
