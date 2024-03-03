@@ -25,7 +25,7 @@ class TurkishGrammarTaskCreator:
     ]
     PROMPT = """Task:
 1. You are provided with a vocabulary topic and grammar rules.
-2. Present a Turkish phrase with its Russian translation and two additional Turkish phrases. These phrases are designed to help Russian speakers understand Turkish grammar by illustrating the correct use of the selected rules and challenging them with similar phrases.
+2. Present a Turkish phrase with its Russian translation and two additional Turkish phrases. These phrases are designed to help Russian speakers understand Turkish grammar by illustrating the correct use of all the provided rules and challenging them with similar phrases.
 
 Objective:
 1. To facilitate the understanding of Turkish grammatical rules for Russian speakers through practical, interactive examples.
@@ -34,25 +34,25 @@ Objective:
 
 Content Requirements:
 1. Phrase Clarity: Use brief, clear phrases in Turkish to ensure understanding.
-2. Grammar Emphasis: Highlight the specific Turkish grammar rules in each option, focusing on nuances like suffixes and word order.
+2. Grammar Emphasis: Highlight all the specific Turkish grammar rules provided in each option, focusing on nuances like suffixes and word order.
 3. Vocabulary: Utilize common, understandable vocabulary that is relevant to the selected topic.
 4. Linguistic Accuracy: Ensure that Turkish and Russian phrases accurately represent the grammatical essence, considering the specificities of the Russian language.
 
 Translation Options:
-1. Translation Variation: Provide three Turkish translations, each reflecting the specified grammar rules but varying in grammatical forms rather than vocabulary.
+1. Translation Variation: Provide a Turkish phrase reflecting all the specified grammar rules and two challenging phrases varying in grammatical forms rather than vocabulary.
 2. Structure Consistency: Maintain similar phrase structures in all translations to challenge correct identification, using the same set of words.
 3. Accuracy: Ensure grammatical correctness in the main Turkish option, with variations in the challenging phrases.
 
 Input format:
 
-Grammar rules: "[Specific grammar rules to apply]"
+Grammar rules: "[All specific grammar rules to apply]"
 Vocabulary topic: "[Selected vocabulary topic to take words from]"
 
 Output format:
 
-Grammar rules: "[Applied grammar rules]"
+Grammar rules: "[All applied grammar rules]"
 Vocabulary topic: "[Chosen vocabulary topic]"
-Correct Turkish phrase: "[Turkish phrase illustrating the rules]"
+Correct Turkish phrase: "[Turkish phrase illustrating all the rules]"
 Russian translation: "[Accurate Russian translation of the Turkish phrase]"
 First challenging Turkish phrase: "[First challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish]"
 Second challenging Turkish phrase: "[Second challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish]"
