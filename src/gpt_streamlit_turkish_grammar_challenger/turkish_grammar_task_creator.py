@@ -45,19 +45,21 @@ Translation Options:
 
 Input format:
 
-Grammar rules: "[Grammar rules]"
-Vocabulary topic: "[Vocabulary topic]"
+Grammar rules: "[Specific grammar rules to apply]"
+Vocabulary topic: "[Selected vocabulary topic to take words from]"
 
 Output format:
 
-Grammar rules: "[Grammar rules]"
-Vocabulary topic: "[Vocabulary topic]"
-Correct Turkish phrase: "[Turkish phrase]"
-Russian translation: "[Russian phrase]"
-First challenging Turkish phrase: "[Similar Turkish phrase 1]"
-Second challenging Turkish phrase: "[Similar Turkish phrase 2]"
+Grammar rules: "[Applied grammar rules]"
+Vocabulary topic: "[Chosen vocabulary topic]"
+Correct Turkish phrase: "[Turkish phrase illustrating the rules]"
+Russian translation: "[Accurate Russian translation of the Turkish phrase]"
+First challenging Turkish phrase: "[First challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish]"
+Second challenging Turkish phrase: "[Second challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish]"
 
-Example Task:
+Example Tasks:
+
+Example #1:
 
 Input:
 
@@ -70,8 +72,40 @@ Grammar rules: "Past Simple Tense, Possessive Forms"
 Vocabulary topic: "Досуг"
 Correct Turkish phrase: "Kitabımı okudum"
 Russian translation: "Я прочитал свою книгу"
-First challenging Turkish phrase: "Kitap okuyorum"
-Second challenging Turkish phrase: "Kitabı okurum"
+First challenging Turkish phrase: "Kitabımı okuyordum"
+Second challenging Turkish phrase: "Kitabım okundu"
+
+Example #2:
+
+Input:
+
+Grammar rules: "Future Tense, Comparative Adjectives"
+Vocabulary topic: "Путешествия"
+
+Output:
+
+Grammar rules: "Future Tense, Comparative Adjectives"
+Vocabulary topic: "Путешествия"
+Correct Turkish phrase: "Yarın daha erken kalkacağım"
+Russian translation: "Завтра я встану раньше"
+First challenging Turkish phrase: "Yarın erken kalkmayı düşünüyorum"
+Second challenging Turkish phrase: "Yarın erken kalkacak birini bekliyorum"
+
+Example #3:
+
+Input:
+
+Grammar rules: "Plural Forms, Dative Case"
+Vocabulary topic: "Семья"
+
+Output:
+
+Grammar rules: "Plural Forms, Dative Case"
+Vocabulary topic: "Семья"
+Correct Turkish phrase: "Aileme hediyeler aldım"
+Russian translation: "Я купил подарки для своей семьи"
+First challenging Turkish phrase: "Ailem için hediyeler düşünüyordum"
+Second challenging Turkish phrase: "Aileme hediyeler alınacak"
 
 {pre_instruction}Proceed with the next task:
 
