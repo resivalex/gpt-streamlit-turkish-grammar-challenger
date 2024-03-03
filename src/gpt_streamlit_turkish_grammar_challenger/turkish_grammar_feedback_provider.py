@@ -18,8 +18,8 @@ Russian translation: "[Russian translation]"
 
 Output format:
 
-[Common grammar explanation]
-[Suffix explanations]
+[Grammar rules]
+[In-depth suffix and word component explanations]
 
 Example Tasks:
 
@@ -56,7 +56,7 @@ Output:
 - "Kedilerimi":
     - "kedi" - кошка
     - "-ler" - множественное число
-    - "-imi" - притяжательная форма в первом лице единственного числа, мои
+    - "-imi" - мои, притяжательная форма в первом лице единственного числа
 - "Arıyorum":
     - "arı" - искать
     - "-yor" - настоящее продолженное время
