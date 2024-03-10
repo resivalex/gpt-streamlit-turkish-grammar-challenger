@@ -5,6 +5,12 @@ import re
 
 from .protocols import FunctionParameter
 
+GPT_CHEAP_MODEL = "claude-3-sonnet-20240229"
+GPT_SMART_MODEL = "claude-3-opus-20240229"
+
+COMPLETION_MODEL = GPT_CHEAP_MODEL
+FUNCTION_MODEL = GPT_CHEAP_MODEL
+
 
 class AnthropicApiClient:
     def __init__(self, api_key: str):
@@ -14,7 +20,7 @@ class AnthropicApiClient:
         completion = self.client.complete(
             prompt=prompt,
             stop_sequences=[anthropic.HUMAN_PROMPT],
-            model="claude-v1",
+            model=COMPLETION_MODEL,
             max_tokens_to_sample=1000,
         )
         return completion.completion
@@ -35,7 +41,7 @@ class AnthropicApiClient:
                 anthropic.AI_PROMPT,
                 "</function_calls>",
             ],
-            model="claude-v1",
+            model=FUNCTION_MODEL,
             max_tokens_to_sample=1024,
             system_prompt=system_prompt,
         ).completion
