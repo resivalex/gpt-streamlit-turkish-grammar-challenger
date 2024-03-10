@@ -1,5 +1,4 @@
 from typing import List
-import anthropic
 from anthropic import Anthropic
 import re
 
