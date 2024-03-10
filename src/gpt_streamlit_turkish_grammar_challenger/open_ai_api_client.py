@@ -1,5 +1,8 @@
+from typing import List
 from openai import OpenAI
 import json
+
+from .protocols import FunctionParameter
 
 
 GPT_CHEAP_MODEL = "gpt-3.5-turbo"
@@ -28,11 +31,16 @@ class OpenAiApiClient:
 
     def call_function(
         self,
-        prompt,
+        prompt: str,
         name: str,
         description: str,
-        schema: dict,
-    ) -> dict:
+        parameters: List[FunctionParameter],
+    ) -> dict[str, str]:
+        schema = {
+            "type": "object",
+            "properties": {param["name"]: {"type": "string"} for param in parameters},
+            "required": [param["name"] for param in parameters],
+        }
         messages = [{"role": "user", "content": prompt}]
         tools = [
             {

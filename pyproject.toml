@@ -11,6 +11,7 @@ python = "^3.11"
 streamlit = "^1.30.0"
 openai = "^1.8.0"
 extra-streamlit-components = "^0.1.60"
+anthropic = "^0.19.1"
 
 
 [tool.poetry.dev-dependencies]

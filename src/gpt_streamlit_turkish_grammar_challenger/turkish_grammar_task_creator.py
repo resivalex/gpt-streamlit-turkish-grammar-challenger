@@ -1,7 +1,7 @@
 import random
 import json
 
-from .open_ai_api_client import OpenAiApiClient
+from .protocols import GptApiClient
 from .types import TurkishGrammarTask
 
 
@@ -120,9 +120,9 @@ Create a Turkish phrase different from listed above to maintain the diversity an
 
 """
 
-    def __init__(self, vocabulary_topic: str, api_client: OpenAiApiClient):
+    def __init__(self, vocabulary_topic: str, gpt_client: GptApiClient):
         self.vocabulary_topic = vocabulary_topic
-        self.api_client = api_client
+        self.gpt_client = gpt_client
 
         self.history = []
 
@@ -148,32 +148,39 @@ Create a Turkish phrase different from listed above to maintain the diversity an
             topic=self.vocabulary_topic,
             pre_instruction=self._build_pre_instruction(),
         )
-        task_data_text = self.api_client.get_completion(prompt)
+        task_data_text = self.gpt_client.get_completion(prompt)
         print("Task data:")
         print(task_data_text)
-        arguments = self.api_client.call_function(
+        arguments = self.gpt_client.call_function(
             prompt=task_data_text,
             name="create_task",
             description="A turkish grammar task",
-            schema={
-                "type": "object",
-                "properties": {
-                    "grammar_rules": {"type": "string"},
-                    "vocabulary_topic": {"type": "string"},
-                    "turkish_phrase": {"type": "string"},
-                    "russian_translation": {"type": "string"},
-                    "first_challenging_turkish_phrase": {"type": "string"},
-                    "second_challenging_turkish_phrase": {"type": "string"},
+            parameters=[
+                {
+                    "name": "grammar_rules",
+                    "description": "All specific grammar rules to apply",
                 },
-                "required": [
-                    "grammar_rules",
-                    "vocabulary_topic",
-                    "turkish_phrase",
-                    "russian_translation",
-                    "first_challenging_turkish_phrase",
-                    "second_challenging_turkish_phrase",
-                ],
-            },
+                {
+                    "name": "vocabulary_topic",
+                    "description": "Selected vocabulary topic to take words from",
+                },
+                {
+                    "name": "turkish_phrase",
+                    "description": "Turkish phrase illustrating all the rules",
+                },
+                {
+                    "name": "russian_translation",
+                    "description": "Accurate Russian translation of the Turkish phrase",
+                },
+                {
+                    "name": "first_challenging_turkish_phrase",
+                    "description": "First challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish",
+                },
+                {
+                    "name": "second_challenging_turkish_phrase",
+                    "description": "Second challenging Turkish phrase, closely resembling the correct phrase in structure and vocabulary, making it challenging to distinguish",
+                },
+            ],
         )
         arguments["turkish_options"] = [
             arguments["first_challenging_turkish_phrase"],

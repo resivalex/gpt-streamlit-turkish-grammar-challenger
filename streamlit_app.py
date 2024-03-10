@@ -90,6 +90,23 @@ def ensure_openai_api_key():
     st.session_state["openai_api_key"] = cookie_openai_api_key
 
 
+def ensure_anthropic_api_key():
+    cookie_anthropic_api_key = cookie_manager.get(cookie="anthropic_api_key")
+    if not cookie_anthropic_api_key:
+        anthropic_api_key = st.text_input("Enter Anthropic API key:", type="password")
+        if anthropic_api_key:
+            cookie_manager.set(
+                "anthropic_api_key",
+                anthropic_api_key,
+                expires_at=datetime.datetime.now() + datetime.timedelta(days=365),
+            )
+            time.sleep(0.1)
+            st.rerun()
+        else:
+            st.stop()
+    st.session_state["anthropic_api_key"] = cookie_anthropic_api_key
+
+
 def render_disabled_chat_input():
     st.chat_input(
         "",
@@ -165,11 +182,13 @@ def process_query():
 st.title("Турецкая грамматика")
 
 initialize_session_state()
-ensure_openai_api_key()
+# ensure_openai_api_key()
+ensure_anthropic_api_key()
 ensure_vocabulary_topic()
 if not st.session_state["turkish_grammar_challenger"]:
     st.session_state["turkish_grammar_challenger"] = TurkishGrammarChallenger(
         openai_api_key=st.session_state["openai_api_key"],
+        anthropic_api_key=st.session_state["anthropic_api_key"],
         vocabulary_topic=st.session_state["vocabulary_topic"],
     )
 render_chat_history()

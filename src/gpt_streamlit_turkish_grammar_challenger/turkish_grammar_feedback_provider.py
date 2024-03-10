@@ -1,4 +1,4 @@
-from .open_ai_api_client import OpenAiApiClient
+from .protocols import GptApiClient
 from .types import TurkishGrammarTask
 
 
@@ -88,8 +88,8 @@ Turkish sentence: "{sentence}"
 Russian translation: "{russian_translation}"
 """
 
-    def __init__(self, api_client: OpenAiApiClient):
-        self.api_client = api_client
+    def __init__(self, gpt_client: GptApiClient):
+        self.gpt_client = gpt_client
 
     def provide(self, task: TurkishGrammarTask, user_answer: str) -> str:
         prompt = self.CHECK_PROMPT.format(
@@ -97,7 +97,7 @@ Russian translation: "{russian_translation}"
             sentence=task["turkish_phrase"],
             russian_translation=task["russian_translation"],
         )
-        grammar_explanation = self.api_client.get_completion(prompt)
+        grammar_explanation = self.gpt_client.get_completion(prompt)
 
         feedback = ""
         simple_feedback = (
