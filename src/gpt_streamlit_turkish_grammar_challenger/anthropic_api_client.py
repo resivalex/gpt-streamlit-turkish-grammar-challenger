@@ -18,10 +18,9 @@ class AnthropicApiClient:
 
     def get_completion(self, prompt: str) -> str:
         completion = self.client.messages.create(
-            prompt=prompt,
-            stop_sequences=[anthropic.HUMAN_PROMPT],
             model=COMPLETION_MODEL,
             max_tokens=1000,
+            messages=[{"role": "user", "content": prompt}],
         )
         return completion.content[0].text
 
@@ -36,15 +35,11 @@ class AnthropicApiClient:
         system_prompt = self._construct_system_prompt([tool])
         function_calling_message = (
             self.client.messages.create(
-                prompt=prompt,
-                stop_sequences=[
-                    anthropic.HUMAN_PROMPT,
-                    anthropic.AI_PROMPT,
-                    "</function_calls>",
-                ],
                 model=FUNCTION_MODEL,
                 max_tokens=1024,
+                messages=[{"role": "user", "content": prompt}],
                 system=system_prompt,
+                stop_sequences=["</function_calls>"],
             )
             .content[0]
             .text
