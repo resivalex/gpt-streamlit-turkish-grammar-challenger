@@ -17,13 +17,13 @@ class AnthropicApiClient:
         self.client = Anthropic(api_key=api_key)
 
     def get_completion(self, prompt: str) -> str:
-        completion = self.client.complete(
+        completion = self.client.messages.create(
             prompt=prompt,
             stop_sequences=[anthropic.HUMAN_PROMPT],
             model=COMPLETION_MODEL,
-            max_tokens_to_sample=1000,
+            max_tokens=1000,
         )
-        return completion.completion
+        return completion.content[0].text
 
     def call_function(
         self,
@@ -34,17 +34,21 @@ class AnthropicApiClient:
     ) -> dict[str, str]:
         tool = self._construct_tool_description(name, description, parameters)
         system_prompt = self._construct_system_prompt([tool])
-        function_calling_message = self.client.complete(
-            prompt=prompt,
-            stop_sequences=[
-                anthropic.HUMAN_PROMPT,
-                anthropic.AI_PROMPT,
-                "</function_calls>",
-            ],
-            model=FUNCTION_MODEL,
-            max_tokens_to_sample=1024,
-            system_prompt=system_prompt,
-        ).completion
+        function_calling_message = (
+            self.client.messages.create(
+                prompt=prompt,
+                stop_sequences=[
+                    anthropic.HUMAN_PROMPT,
+                    anthropic.AI_PROMPT,
+                    "</function_calls>",
+                ],
+                model=FUNCTION_MODEL,
+                max_tokens=1024,
+                system=system_prompt,
+            )
+            .content[0]
+            .text
+        )
         return {
             param["name"]: self._extract_parameter_value(
                 param["name"], function_calling_message
