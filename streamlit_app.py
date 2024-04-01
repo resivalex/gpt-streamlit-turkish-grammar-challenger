@@ -182,8 +182,8 @@ def process_query():
 st.title("Турецкая грамматика")
 
 initialize_session_state()
-# ensure_openai_api_key()
-ensure_anthropic_api_key()
+ensure_openai_api_key()
+# ensure_anthropic_api_key()
 ensure_vocabulary_topic()
 if not st.session_state["turkish_grammar_challenger"]:
     st.session_state["turkish_grammar_challenger"] = TurkishGrammarChallenger(
