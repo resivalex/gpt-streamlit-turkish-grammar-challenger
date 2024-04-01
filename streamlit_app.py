@@ -50,6 +50,7 @@ def initialize_session_state():
     if "initialized" not in st.session_state:
         st.session_state["initialized"] = True
         st.session_state["openai_api_key"] = ""
+        st.session_state["anthropic_api_key"] = ""
         st.session_state["vocabulary_topic"] = ""
         st.session_state["turkish_grammar_challenger"] = None
         st.session_state["chat_history"] = []
@@ -188,7 +189,7 @@ ensure_vocabulary_topic()
 if not st.session_state["turkish_grammar_challenger"]:
     st.session_state["turkish_grammar_challenger"] = TurkishGrammarChallenger(
         openai_api_key=st.session_state["openai_api_key"],
-        anthropic_api_key=None,  # st.session_state["anthropic_api_key"],
+        anthropic_api_key=st.session_state["anthropic_api_key"],
         vocabulary_topic=st.session_state["vocabulary_topic"],
     )
 render_chat_history()
